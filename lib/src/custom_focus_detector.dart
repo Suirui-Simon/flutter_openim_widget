@@ -90,36 +90,25 @@ class _FocusDetectorState extends State<FocusDetector>
   Widget build(BuildContext context) => VisibilityDetector(
         key: _visibilityDetectorKey,
         onVisibilityChanged: (visibilityInfo) {
-          try {
-            // 当widget高度超过一屏时visibilityInfo.visibleFraction的值达不到1
-            final visibleBoundsBottom = visibilityInfo.visibleBounds.bottom;
-            final height = visibilityInfo.size.height;
-            final fraction = visibleBoundsBottom / height;
-            _notifyVisibilityStatusChange(fraction);
-          } catch (_) {
-            final visibleFraction = visibilityInfo.visibleFraction;
-            _notifyVisibilityStatusChange(visibleFraction);
-          }
+          _notifyVisibilityStatusChange(visibilityInfo.visibleFraction > 0.8);
         },
         child: widget.child,
       );
 
   /// Notifies changes in the widget's visibility.
-  void _notifyVisibilityStatusChange(double newVisibleFraction) {
+  void _notifyVisibilityStatusChange(bool fullyVisible) {
     if (!_isAppInForeground) {
       return;
     }
 
     final wasFullyVisible = _isWidgetVisible;
-    final isFullyVisible = newVisibleFraction == 1;
-    if (!wasFullyVisible && isFullyVisible) {
+    if (!wasFullyVisible && fullyVisible) {
       _isWidgetVisible = true;
       _notifyFocusGain();
       _notifyVisibilityGain();
     }
 
-    final isFullyInvisible = newVisibleFraction == 0;
-    if (wasFullyVisible && isFullyInvisible) {
+    if (wasFullyVisible && fullyVisible) {
       _isWidgetVisible = false;
       _notifyFocusLoss();
       _notifyVisibilityLoss();
