@@ -245,7 +245,7 @@ class EmojiLayout extends StatelessWidget {
         },
         config: Config(
           columns: 7,
-          emojiSizeMax: 28 * (Platform.isIOS ? 1.30 : 1.0),
+          emojiSizeMax: 26 * (Platform.isIOS ? 1.30 : 1.0),
           // Issue: https://github.com/flutter/flutter/issues/28894
           verticalSpacing: 0,
           horizontalSpacing: 0,
@@ -269,6 +269,7 @@ class EmojiLayout extends StatelessWidget {
           tabIndicatorAnimDuration: kTabScrollDuration,
           categoryIcons: const CategoryIcons(),
           buttonMode: ButtonMode.MATERIAL,
+          checkPlatformCompatibility: true,
         ),
       ),
     );
