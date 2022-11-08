@@ -132,7 +132,10 @@ class _ChatVideoPlayerViewState extends State<ChatVideoPlayerView> {
       videoPlayerController: _videoPlayerController,
       autoPlay: true,
       looping: false,
+      allowFullScreen: false,
+      allowPlaybackSpeedChanging: false,
       showControlsOnInitialize: true,
+      useRootNavigator: false,
       optionsTranslation: OptionsTranslation(
         playbackSpeedButtonText: UILocalizations.playSpeed,
         cancelButtonText: UILocalizations.cancel,
