@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_openim_widget/flutter_openim_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-typedef IndexedToolsBuilder = Widget Function(
-    BuildContext context, int index, ToolsItem item);
+import 'over_scroll_behavior.dart';
+
+typedef IndexedToolsBuilder = Widget Function(BuildContext context, int index, ToolsItem item);
 
 class ChatToolsView extends StatefulWidget {
   final List<ToolsItem>? items;
@@ -54,8 +55,7 @@ class ChatToolsView extends StatefulWidget {
   _ChatToolsViewState createState() => _ChatToolsViewState();
 }
 
-class _ChatToolsViewState extends State<ChatToolsView>
-    with TickerProviderStateMixin {
+class _ChatToolsViewState extends State<ChatToolsView> with TickerProviderStateMixin {
   var _enabledVoiceInput = false;
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -108,7 +108,7 @@ class _ChatToolsViewState extends State<ChatToolsView>
         children: [
           FadeInUp(
             duration: Duration(milliseconds: 200),
-            child: _buildToolsLayout(),
+            child: _buildToolsLayout2(),
           ),
           _buildVoiceInputLayout(),
         ],
@@ -123,8 +123,91 @@ class _ChatToolsViewState extends State<ChatToolsView>
   EdgeInsetsGeometry get _margin =>
       widget.margin ??
       EdgeInsets.symmetric(
-        horizontal: 38.w,
-        vertical: 17.h,
+        horizontal: 0.w,
+        vertical: 16.h,
+      );
+
+  Widget _buildToolsLayout2() => Container(
+        alignment: Alignment.center,
+        margin: _margin,
+        child: ScrollConfiguration(
+          behavior: OverScrollBehavior(),
+          child: GridView.count(
+            crossAxisCount: 4,
+            // mainAxisSpacing: 10.h,
+            // crossAxisSpacing: 10.w,
+            childAspectRatio: 1.0,
+            children: [
+              if (widget.onTapAlbum != null)
+                _toolsOption(ToolsItem(
+                  label: UILocalizations.album,
+                  style: toolsTextStyle,
+                  image: _buildBtn(
+                    icon: widget.albumIcon ?? ImageUtil.toolsAlbum(),
+                    onTap: widget.onTapAlbum,
+                  ),
+                )),
+              if (widget.onTapCamera != null)
+                _toolsOption(ToolsItem(
+                  label: UILocalizations.camera,
+                  style: toolsTextStyle,
+                  image: _buildBtn(
+                    icon: widget.cameraIcon ?? ImageUtil.toolsCamera(),
+                    onTap: widget.onTapCamera,
+                  ),
+                )),
+              if (widget.onTapVideoCall != null)
+                _toolsOption(ToolsItem(
+                  label: UILocalizations.videoCall,
+                  style: toolsTextStyle,
+                  image: _buildBtn(
+                    icon: widget.videoCallIcon ?? ImageUtil.toolsVideoCall(),
+                    onTap: widget.onTapVideoCall,
+                  ),
+                )),
+              if (widget.onTapLocation != null)
+                _toolsOption(ToolsItem(
+                  label: UILocalizations.location,
+                  style: toolsTextStyle,
+                  image: _buildBtn(
+                    icon: widget.locationIcon ?? ImageUtil.toolsLocation(),
+                    onTap: widget.onTapLocation,
+                  ),
+                )),
+              if (widget.onTapFile != null)
+                _toolsOption(ToolsItem(
+                  label: UILocalizations.file,
+                  style: toolsTextStyle,
+                  image: _buildBtn(
+                    icon: widget.fileIcon ?? ImageUtil.toolsFile(),
+                    onTap: widget.onTapFile,
+                  ),
+                )),
+              if (widget.onTapCarte != null)
+                _toolsOption(ToolsItem(
+                  label: UILocalizations.carte,
+                  style: toolsTextStyle,
+                  image: _buildBtn(
+                    icon: widget.carteIcon ?? ImageUtil.toolsCarte(),
+                    onTap: widget.onTapCarte,
+                  ),
+                )),
+              // _toolsOption(ToolsItem(
+              //   label: UILocalizations.voiceInput,
+              //   style: toolsTextStyle,
+              //   image: _buildBtn(
+              //     icon: widget.voiceInputIcon ?? ImageUtil.toolsVoiceInput(),
+              //     onTap: () {
+              //       setState(() {
+              //         _enabledVoiceInput = true;
+              //         _controller.forward();
+              //       });
+              //     },
+              //   ),
+              // )),
+            ],
+          ),
+        ),
       );
 
   Widget _buildToolsLayout() => Container(
@@ -324,8 +407,7 @@ class _ChatToolsViewState extends State<ChatToolsView>
         ),
       ];*/
 
-  Widget _buildBtn({required Widget icon, Function()? onTap}) =>
-      GestureDetector(
+  Widget _buildBtn({required Widget icon, Function()? onTap}) => GestureDetector(
         onTap: onTap,
         behavior: HitTestBehavior.translucent,
         child: icon,
